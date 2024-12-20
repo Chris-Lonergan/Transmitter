@@ -1,0 +1,111 @@
+class Transmitter(bitrate)
+    state_valid = False
+    create 3 atts, synth, mod switch, PA, PRBS
+
+    def tranmit(?):
+	print(transmitting ?)
+	for bit in message: #LSB first
+                transmit_bit(bit)
+	
+
+    def transmit_bit(bit):
+        mod switch.set_transmit(bit)
+        sleep_ms()
+
+    def reset_to_prev_state(bit):
+        set attenuator to previous state (default 0)
+        set synth to previosu state, wait for lock
+        set PA to previous state (off)
+        mod switch to on
+
+    def reset():
+        print(resetting)
+	set att to 0
+	set synth to 915mhz, wait for lock
+	set pa to off
+	mod switch to on
+    
+class Attenuator(data_io, clk_io, latch_io)
+    att_val = 0
+    def set_to_old_state (rename):
+        set_atten(att_val)
+
+    def set_atten(value):
+	print('setting atten on gpio '' to val)
+        for bit in bits: #MSB first
+            clk_io.sethigh
+            sleep(0.1ms)
+            data_io.set(bit)
+            clk_io.setlow
+            sleep(0.1ms)
+        latch.set(high)
+        sleep(0.1ms)
+        latch.set(low)
+
+class synth(SPI, enable GPIO)
+
+class modulateion_switch  (GPIO)
+    state = 1
+    def set_transmit(bool val):
+	print('Mod switch on/off)
+        gpio.set(val)
+
+class PA (GPIO) - also turns on switches    
+    state = 0
+    def set_pa(bool val):
+	print('PA mode enabled/PA mode disabled)
+        gpio.set(val)
+
+class PRBS(seed):
+    def get():
+	print(PRBS returned num)
+        return num
+
+main:
+try to create serial port if possible
+serial_active=^?
+wait 3 secs if serial active... if no 'manual' over serial begin prbs for mod switch
+print(manual)
+manual=^?
+mainloop()
+
+mainloop()
+while true:
+    #startup by:
+    if !state_valid:
+        transmitter.reset_to_prev_state
+        
+    if manual:
+	#Standard is 'object' 'state'
+	#Switch, pa, synth, mod switch on/off
+	#att value
+	#transmit hex?
+	#reset 
+	#synth read ?
+	#synth write ?
+	#transmit prbs
+	msg.split(' ')
+	case msg[0]
+    if not manual:
+	print('transmitting prbs...)
+        i = 0
+        while True:
+            bit = PRBS.get(i)
+            transmit_bit(bit)
+            i += 1
+            
+def print_uart(text)
+	try printing if serial is active, if not ignore
+    
+interrupt hw_sw -> sw #make sure interrupts cant be interrupted (debouncing)
+	print(sw mode)
+    sleep(0.5s) #debounce
+    mainloop()
+
+interrupt hw_sw -> hw
+	print(hw mode)
+    sleep(0.5s) #debounce
+    state_valid = False
+    while True:
+        #allow interrupting
+        if serial comes in, print not allowed

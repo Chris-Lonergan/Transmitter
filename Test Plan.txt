@@ -1,0 +1,14 @@
+
+1. Power tree: Plugging in the board and verifying that 3.3V comes out of the digital and RF LDOs
+
+2. Basic Digital Check: Attempting to flash simple code to the RP2040 that will blink the onboard LED
+    - should validate everything besides the RF chain/control
+
+3. Synth Programming: Attempting to communicate with the PLL over SPI and changing register values to attempt to see an RF signal out (all other devices can be in the default state)
+    - broad test, just want to see SOMETHING come out at the right freququency
+
+RF Chain Programming: Communicating with variable attenuators, and switches, exercising all RF chain options, both manually and through software
+
+Power Amplifier: Biasing the PA and testing small signal gain, matching if necessary
+
+Networking Code: Finalizing code for transmitting PRBS OOK and setting the RF chain into different states

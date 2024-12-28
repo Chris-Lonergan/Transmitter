@@ -1,111 +1,48 @@
-class Transmitter(bitrate)
-    state_valid = False
-    create 3 atts, synth, mod switch, PA, PRBS
+Commands
+    att (attnum) (val) : Sets attenutator num attnum to val
+    reset att1/att2/att3/synth/pa/prbs/switch/transmitter
+    synth (regnum) (val): Sets synth mem[regnum] to int val
+    pa 1/0: sets PA chain to on or off
+    get PRBS: retusn PRBS next number
+    switch 1/0: turn mod switch on or off
+    transmit (int data): transmits data 
+    revert: reverts to old state, only does anything if you had just switcehd to hardware control, changed things, and we now wan tto go back to hw control
 
-    def tranmit(?):
-	print(transmitting ?)
-	for bit in message: #LSB first
-                transmit_bit(bit)
-	
 
-    def transmit_bit(bit):
-        mod switch.set_transmit(bit)
-        sleep_ms()
+while True:
+	state = 'sw_control'
+    state_valid = True
 
-    def reset_to_prev_state(bit):
-        set attenuator to previous state (default 0)
-        set synth to previosu state, wait for lock
-        set PA to previous state (off)
-        mod switch to on
+	while (state == sw_control)
+        if state_valid == False:
+            pritn("prob should revert unless u def didnt touch anything in sw mode!!!")
+        while (character not newline)
+            if gpio == sw:
+                state_valid=False
+                sleep(a bit to debounce)
+                state==sw_control
+                break
+            get new chars
+        if state==sw break
+        process command, do the thing
 
-    def reset():
-        print(resetting)
-	set att to 0
-	set synth to 915mhz, wait for lock
-	set pa to off
-	mod switch to on
-    
-class Attenuator(data_io, clk_io, latch_io)
-    att_val = 0
-    def set_to_old_state (rename):
-        set_atten(att_val)
 
-    def set_atten(value):
-	print('setting atten on gpio '' to val)
-        for bit in bits: #MSB first
-            clk_io.sethigh
-            sleep(0.1ms)
-            data_io.set(bit)
-            clk_io.setlow
-            sleep(0.1ms)
-        latch.set(high)
-        sleep(0.1ms)
-        latch.set(low)
-
-class synth(SPI, enable GPIO)
-
-class modulateion_switch  (GPIO)
-    state = 1
-    def set_transmit(bool val):
-	print('Mod switch on/off)
-        gpio.set(val)
-
-class PA (GPIO) - also turns on switches    
-    state = 0
-    def set_pa(bool val):
-	print('PA mode enabled/PA mode disabled)
-        gpio.set(val)
-
-class PRBS(seed):
-    def get():
-	print(PRBS returned num)
-        return num
-
-main:
-try to create serial port if possible
-serial_active=^?
-wait 3 secs if serial active... if no 'manual' over serial begin prbs for mod switch
-print(manual)
-manual=^?
-mainloop()
-
-mainloop()
-while true:
-    #startup by:
-    if !state_valid:
-        transmitter.reset_to_prev_state
+	while (state==hw_control)	
+		if gpio==hw
+			sleep(a bit)
+			satte=hw_control
         
-    if manual:
-	#Standard is 'object' 'state'
-	#Switch, pa, synth, mod switch on/off
-	#att value
-	#transmit hex?
-	#reset 
-	#synth read ?
-	#synth write ?
-	#transmit prbs
-	msg.split(' ')
-	case msg[0]
-    if not manual:
-	print('transmitting prbs...)
-        i = 0
-        while True:
-            bit = PRBS.get(i)
-            transmit_bit(bit)
-            i += 1
-            
-def print_uart(text)
-	try printing if serial is active, if not ignore
-    
-interrupt hw_sw -> sw #make sure interrupts cant be interrupted (debouncing)
-	print(sw mode)
-    sleep(0.5s) #debounce
-    mainloop()
 
-interrupt hw_sw -> hw
-	print(hw mode)
-    sleep(0.5s) #debounce
-    state_valid = False
-    while True:
-        #allow interrupting
-        if serial comes in, print not allowed
+
+
+
+    // int state = 0;
+    // int i=0;
+    // for (int i=0; i < 10; i++) {
+    //     printf("Hello, world!\n");
+    //     gpio_put(gpios[i], 1);
+    //     sleep_ms(1000);
+    //     state = not state;
+    //     gpio_put(gpios[i], 0);
+    // }
+    //mainloop(false, transmitter);

@@ -110,20 +110,29 @@ void PA_Chain::reset() {
 
 
 PRBS::PRBS(int seed_) {
-    this->seed = seed_;
-    this->i = 0;
+    /**Up to 24 taps since state is at most a 24 bit int */
+    this->seed = seed_ & 0b111111111111111111111111;
+    this->reset();
 }
 
 int PRBS::get() {
-    int gen = 1; //this based on seed
-    this->i++;
-    return gen;
-    printf("-Getting next val form PRBS, i=%d, val=%d\n", i, gen);
+    int feedback_bit = this->state & 1;
+
+    for (int i=0; i<4;i++) {
+        if (taps[i] != -1) {
+            int val_at_tap_pos = (this->state & (1 << (24-taps[i]))) >> (24-taps[i]);
+            feedback_bit = feedback_bit ^ val_at_tap_pos; 
+        }
+    }
+
+    this->state = ((this->state >> 1) & 0b011111111111111111111111) | (feedback_bit << 23);
+    //printf("-Getting next val form PRBS, feedback bit = %d, state=%d\n", feedback_bit, this->state);
+    return this->state;
 }
 
 void PRBS::reset() {
     printf("-Resetting PRBS\n");
-    this->i = 0;
+    this->state = this->seed;
 }
 
 
@@ -152,7 +161,6 @@ void SKY13286_sw::reset() {
 TransmitterClass::TransmitterClass(int bitrate_) {
     printf("-Instantiating transmitter\n");
     bitrate = bitrate_;   
-    int seed = 1;
     state_valid = false;
     printf("--Creating varatt\n");
     varatt1 = new F1953_att(SPI_CLK_GPIO, SPI_MOSI_GPIO, ATT1_LE_GPIO);
@@ -167,7 +175,7 @@ TransmitterClass::TransmitterClass(int bitrate_) {
     printf("--Creating PA chain\n");
     PA = new PA_Chain(PA_EN_GPIO);
     printf("--Creating PRBS\n");
-    prbs = new PRBS(seed);
+    prbs = new PRBS(PRBS_SEED);
     printf("-Done Instantiating Transmitter\n");
 }
 

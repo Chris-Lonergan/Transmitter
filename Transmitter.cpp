@@ -25,7 +25,7 @@ int main()
     TransmitterClass transmitter(1);
     transmitter.reset();
 
-    bool onoff = 0;
+    bool prbs = true;
     char strg[100];
     char chr;
     int lp = 0;
@@ -140,7 +140,18 @@ int main()
                         printf("CLI: Not a valid option, either 1 or 0");
                     }
                 } else if (strcmp("prbs", tokens[0])==0) {
-                    printf("PRBS command");
+                    if (numTokens < 2) {
+                        printf("CLI: Not enough tokens for prbs");
+                    }
+                    if (strcmp(tokens[1], "start")==0) {
+                        prbs=true;
+                    } else if (strcmp(tokens[1], "stop")==0) {
+                        prbs=false;
+                    } else if (strcmp(tokens[1], "get")==0) {
+                        printf("Next prbs generated number: %d", transmitter.prbs->get());
+                    } else {
+                        printf("CLI: Expecting either start/stop for PRBS");
+                    }
                 } else if (strcmp("switch", tokens[0])==0) {
                     if (numTokens < 2) {
                         printf("CLI: Not enough tokens for switch");
@@ -176,8 +187,12 @@ int main()
             }
             chr = getchar_timeout_us(0);
         }
-        gpio_put(LED2_GPIO, onoff);
-        onoff = !onoff;
-        sleep_ms(100);
+        if (prbs) {
+            int prbs_val = transmitter.prbs->get();
+            printf("%d\n", prbs_val);
+            //transmitter.transmit_bit(prbs_val & 1);
+            gpio_put(LED2_GPIO, prbs_val & 1);
+            sleep_ms(100);
+        }
         }
 }

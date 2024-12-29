@@ -25,6 +25,7 @@ const int LED2_GPIO = 24;
 const int SYNTH_EN_GPIO = 8;
 const int HW_SW_GPIO = 14;
 
+const int PRBS_SEED = 0xACE1;
 const int NEWLINE_CHAR = 10;
 const int DEFAULT_CHAR = 254;
 const int SEED_DEF =1;

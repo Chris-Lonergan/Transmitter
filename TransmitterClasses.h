@@ -43,7 +43,8 @@ class PA_Chain { //also turns on switches
 
 class PRBS {
     int seed;
-    int i;
+    int taps[4] = {24,23,22,17};
+    int state;
     public:
         PRBS(int seed_);
         int get();

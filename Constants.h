@@ -26,10 +26,10 @@ const int SYNTH_EN_GPIO = 8;
 const int HW_SW_GPIO = 14;
 
 const int PRBS_SEED = 0xACE1;
+const int BITRATE = 10;
 const int NEWLINE_CHAR = 10;
 const int DEFAULT_CHAR = 254;
-const int SEED_DEF =1;
-const int SPI_DELAY=10;
+const int SPI_DELAY=10; //us
 
 const int SYNTH_REG0_DEFAULT = 11993088;
 const int SYNTH_REG1_DEFAULT = 268468241;

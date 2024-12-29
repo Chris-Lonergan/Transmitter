@@ -21,8 +21,8 @@ int main()
     gpio_set_dir(HW_SW_GPIO, GPIO_IN);
 
     sleep_ms(5000);
-    printf("Beginning code\n");
-    TransmitterClass transmitter(1);
+    printf("Beginning OOK Transmitter\n");
+    TransmitterClass transmitter(BITRATE);
     transmitter.reset();
 
     bool prbs = true;
@@ -194,5 +194,5 @@ int main()
             gpio_put(LED2_GPIO, prbs_val & 1);
             sleep_ms(100);
         }
-        }
+    }
 }

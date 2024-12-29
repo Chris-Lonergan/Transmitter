@@ -32,6 +32,8 @@ int main()
     memset(strg, 0, sizeof(strg));
 
     while (true) {
+        int hw_sw = gpio_get(HW_SW_GPIO);
+
         chr = getchar_timeout_us(0);
         while(chr != DEFAULT_CHAR)
         {  
@@ -56,9 +58,9 @@ int main()
                 }
                 
                 //for debugging
-                for (int i = 0; i < tokenIter; ++i) {
-                    printf("Token i: %d, = '%s'\n", i, tokens[i]);
-                }
+                // for (int i = 0; i < tokenIter; ++i) {
+                //     printf("Token i: %d, = '%s'\n", i, tokens[i]);
+                // }
                 
                 size_t numTokens = sizeof(tokens)/sizeof(tokens[0]);
 
@@ -66,9 +68,12 @@ int main()
                     printf("Empty command");
                     break;
                 }
-
+                
+                if (hw_sw == 1) {
+                    printf("Currently in SW control, no commands possible");
+                    break;
+                }
                 //process command 
-                sleep_ms(100);
                 if (strcmp(tokens[0], "att") == 0) {
                     //Allowed command is att (attnum) (attval)
                     if (numTokens < 3) {
@@ -147,12 +152,12 @@ int main()
                     } else {
                         printf("CLI: Not a valid option, either 1 or 0");
                     }
-                } else if (strcmp("transmit", tokens[0])==0) {
+                } else if (strcmp("transmit32", tokens[0])==0) {
                     if (numTokens < 2) {
                         printf("CLI: not enough tokens for transmit");
                     }
                     int data = std::stoi(tokens[1]);
-                    transmitter.transmit(data);
+                    transmitter.transmit_32b(data);
                 } else if (strcmp("revert", tokens[0])==0) {
                     transmitter.reset_to_old_state();
                 } else if (strcmp("help", tokens[0])==0) {
@@ -163,7 +168,7 @@ int main()
                         "\n\tpa 1/0: sets PA chain to on or off"
                         "\n\tprbs get/start/stop: retusn PRBS next number"
                         "\n\tswitch 1/0: turn mod switch on or off"
-                        "\n\ttransmit (int data): transmits data"
+                        "\n\ttransmit32 (int data): transmits 32bit word MSB first"
                         "\n\trevert: reverts to old state, only does anything if you had just switcehd to hardware control, changed things, and we now wan tto go back to hw control");
                 } else {
                     printf("Not valid command. please see help");

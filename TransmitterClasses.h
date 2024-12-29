@@ -75,7 +75,7 @@ class TransmitterClass {
         PRBS* prbs;
 
         TransmitterClass(int bitrate);
-        void transmit(int data);
+        void transmit_32b(int data);
         void transmit_bit(int bit);
         void reset_to_old_state();
         void reset();

@@ -9,31 +9,6 @@ Commands
     revert: reverts to old state, only does anything if you had just switcehd to hardware control, changed things, and we now wan tto go back to hw control
 
 
-while True:
-	state = 'sw_control'
-    state_valid = True
-
-	while (state == sw_control)
-        if state_valid == False:
-            pritn("prob should revert unless u def didnt touch anything in sw mode!!!")
-        while (character not newline)
-            if gpio == sw:
-                state_valid=False
-                sleep(a bit to debounce)
-                state==sw_control
-                break
-            get new chars
-        if state==sw break
-        process command, do the thing
-
-
-	while (state==hw_control)	
-		if gpio==hw
-			sleep(a bit)
-			satte=hw_control
-        
-
-
 
 
     // int state = 0;

@@ -132,7 +132,8 @@ SKY13286_sw::SKY13286_sw(int gpio_) {
 }
 
 void SKY13286_sw::set_state(bool state) {
-    printf("-Setting SKY Switch to state %d\n", state);
+    printf("-Setting SKY Switch on gpio %d to state %d\n",this->gpio, state);
+    this->state = state;
     gpio_put(this->gpio, this->state);
 }
 
@@ -170,10 +171,10 @@ TransmitterClass::TransmitterClass(int bitrate_) {
     printf("-Done Instantiating Transmitter\n");
 }
 
-void TransmitterClass::transmit(int data) {
+void TransmitterClass::transmit_32b(int data) {
     printf("-Transmitting data\n");
     int bit;
-    for(int i=5;i>=0;i--) {
+    for(int i=32;i>=0;i--) {
         bit = (data & (1 << i)) >> i;
         this->transmit_bit(bit);
     }
@@ -182,7 +183,7 @@ void TransmitterClass::transmit(int data) {
 void TransmitterClass::transmit_bit(int bit) {
     printf("--Transmitting bit %d\n", bit);
     this->modSwitch->set_state(bit);
-    sleep_us(1000000 *1/this->bitrate); //This
+    sleep_us(1000000 *1/this->bitrate); //TODO
 }
 
 void TransmitterClass::reset_to_old_state() {

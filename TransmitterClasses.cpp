@@ -39,7 +39,7 @@ void F1953_att::reset_to_old_state() {
 }
 
 void F1953_att::set_atten(int val) {
-    printf("-Setting Att on latch pin %d to state %d\n", this->latch_io, this->att_val);
+    printf("-Setting Att on latch pin %d to state %d\n", this->latch_io, val);
     latched_serial_write(this->clk_io, this->data_io, this->latch_io, 6, val);
     this->att_val = val;
 }

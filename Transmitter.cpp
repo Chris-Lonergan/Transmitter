@@ -2,7 +2,7 @@
 #include "pico/stdlib.h"
 #include "TransmitterClasses.h"
 #include "Constants.h"
-#include <vector>
+#include <string>
 #include <cstring>
 
 int main()
@@ -34,23 +34,143 @@ int main()
     while (true) {
         chr = getchar_timeout_us(0);
         while(chr != DEFAULT_CHAR)
-        {
+        {  
+            // printf("Received char: %d", chr);
             strg[lp++] = chr;
             if(chr == NEWLINE_CHAR || lp == (sizeof(strg) - 1))
             {
-                strg[lp] = 0;	//terminate string
-                lp = 0;		//reset string buffer pointer
-                printf("Command: %s\n", strg);
+                //Terminate string prematurely to strip /n
+
+                strg[lp-1] = 0;	
+                char strg_stripped[lp-1];
+                lp = 0;	
+
+                //tokenize
+                char* tokens[100]; 
+                int tokenIter = 0;
+
+                char* token = strtok(strg, " ");
+                while (token != nullptr) {
+                    tokens[tokenIter++] = token;
+                    token = strtok(nullptr, " "); 
+                }
                 
+                //for debugging
+                for (int i = 0; i < tokenIter; ++i) {
+                    printf("Token i: %d, = '%s'\n", i, tokens[i]);
+                }
                 
+                size_t numTokens = sizeof(tokens)/sizeof(tokens[0]);
+
+                if (numTokens == 0) {
+                    printf("Empty command");
+                    break;
+                }
+
                 //process command 
+                sleep_ms(100);
+                if (strcmp(tokens[0], "att") == 0) {
+                    //Allowed command is att (attnum) (attval)
+                    if (numTokens < 3) {
+                        printf("Invalid command (att chain)");
+                        break;
+                    }
+
+                    //Try to cast tokens[2] to int
+                    int attval = std::stoi(tokens[2]);
+
+                    if (strcmp(tokens[1], "1")==0) {
+                        transmitter.varatt1->set_atten(attval);
+                    } else if (strcmp(tokens[1], "2")==0) {
+                        transmitter.varatt1->set_atten(attval);
+                    } else if (strcmp(tokens[1], "3")==0) {
+                        transmitter.varatt1->set_atten(attval);
+                    } else {
+                        printf("Invalid atten choice (1, 2, 3)");
+                    }
+                } else if (strcmp("reset", tokens[0])==0) {
+                    if ((numTokens) < 2) {
+                        printf("Reset: Not enough tokens");
+                    }
+
+                    if (strcmp(tokens[1], "att1")==0) {
+                        transmitter.varatt1->reset();
+                    } else if (strcmp(tokens[1], "att2")==0) {
+                        transmitter.varatt2->reset();
+                    } else if (strcmp(tokens[1], "att3")==0) {
+                        transmitter.varatt3->reset();
+                    } else if (strcmp(tokens[1], "synth")==0) {
+                        transmitter.synth->reset();
+                    } else if (strcmp(tokens[1], "pa")==0) {
+                        transmitter.PA->reset();
+                    } else if (strcmp(tokens[1], "prbs")==0) {
+                        transmitter.prbs->reset();
+                    } else if (strcmp(tokens[1], "switch")==0) {
+                        transmitter.modSwitch->reset();
+                    } else if (strcmp(tokens[1], "all")==0) {
+                        transmitter.reset();
+                    } else {
+                        printf("CLI: Not a valid reset target");
+                        break;
+                    }
+                } else if (strcmp("synth", tokens[0])==0) {
+                    if (numTokens < 3) {
+                        printf("CLI: Not enough tokens for synth commmand (requires 'synth (regnum) (val))");
+                        break;
+                    }
+
+                    int regnum = std::stoi(tokens[1]);
+                    int regval = std::stoi(tokens[2]);
                 
-                
-                break;
+                    transmitter.synth->write_reg(regnum, regval);
+                } else if (strcmp("pa", tokens[0])==0) {
+                    if (numTokens < 2) {
+                        printf("CLI: Not enough tokens for pa");
+                    }
+                    if ((strcmp(tokens[1], "1")==0) || (strcmp(tokens[1], "on")==0)) {
+                        transmitter.PA->set_state(true);
+                    } else if ((strcmp(tokens[1], "0")==0) || (strcmp(tokens[1], "off")==0)) {
+                        transmitter.PA->set_state(false);
+                    } else {
+                        printf("CLI: Not a valid option, either 1 or 0");
+                    }
+                } else if (strcmp("prbs", tokens[0])==0) {
+                    printf("PRBS command");
+                } else if (strcmp("switch", tokens[0])==0) {
+                    if (numTokens < 2) {
+                        printf("CLI: Not enough tokens for switch");
+                    }
+                    if ((strcmp(tokens[1], "1")==0) || (strcmp(tokens[1], "on")==0)) {
+                        transmitter.PA->set_state(true);
+                    } else if ((strcmp(tokens[1], "0")==0) || (strcmp(tokens[1], "off")==0)) {
+                        transmitter.PA->set_state(false);
+                    } else {
+                        printf("CLI: Not a valid option, either 1 or 0");
+                    }
+                } else if (strcmp("transmit", tokens[0])==0) {
+                    if (numTokens < 2) {
+                        printf("CLI: not enough tokens for transmit");
+                    }
+                    int data = std::stoi(tokens[1]);
+                    transmitter.transmit(data);
+                } else if (strcmp("revert", tokens[0])==0) {
+                    transmitter.reset_to_old_state();
+                } else if (strcmp("help", tokens[0])==0) {
+                    printf("CLI Commands:"
+                        "\n\tatt (attnum) (val) : Sets attenutator num attnum to val"
+                        "\n\treset att1/att2/att3/synth/pa/prbs/switch/transmitter"
+                        "\n\tsynth (regnum) (val): Sets synth mem[regnum] to int val"
+                        "\n\tpa 1/0: sets PA chain to on or off"
+                        "\n\tprbs get/start/stop: retusn PRBS next number"
+                        "\n\tswitch 1/0: turn mod switch on or off"
+                        "\n\ttransmit (int data): transmits data"
+                        "\n\trevert: reverts to old state, only does anything if you had just switcehd to hardware control, changed things, and we now wan tto go back to hw control");
+                } else {
+                    printf("Not valid command. please see help");
+                } 
             }
             chr = getchar_timeout_us(0);
         }
-
         gpio_put(LED2_GPIO, onoff);
         onoff = !onoff;
         sleep_ms(100);

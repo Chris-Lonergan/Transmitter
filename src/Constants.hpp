@@ -38,7 +38,8 @@ const int ATTEN_WORD_LEN = 6;
 const int NEWLINE_CHAR = 10;
 const int DEFAULT_CHAR = 254;
 const int SPI_DELAY=10; //TODO: decrease once done testing
-const std::vector<std::string> EMPTY_CMD = {std::string("EMPTY")};
+const int PRBS_TAPS_DEFAULT[4] = {24,23,22,17}; //For maximum period Linear Feedback Shift Register w 24 bit state
+const std::vector<std::string> EMPTY_CMD = {std::string("NO_COMMAND_RECEIVED")};
 
 /**
  * For Synth memory explanation, see doc/regmap.xlsx

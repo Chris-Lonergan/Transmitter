@@ -30,7 +30,6 @@ void ADF4351_synth::write_mem(int mem[6]) {
 void ADF4351_synth::write_reg(int addr, int data) {
     int word_len = 32;
     if ((data > pow(2, (word_len + 1)) - 1) | (data < 0)) {
-        //invalid data
         printf("\tInvalid data, data = %d is either > %d or < 0\n", data, pow(2, (word_len + 1)) - 1);
         return;
     }

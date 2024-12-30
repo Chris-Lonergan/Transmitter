@@ -3,7 +3,7 @@
 
 class PRBS {
     int seed;
-    int taps[4] = {24,23,22,17};
+    int taps[4];
     int state;
     public:
         PRBS(int seed_);

@@ -66,16 +66,12 @@ void TransmitterClass::reset_to_old_state() {
 void TransmitterClass::reset() {
     printf("Resetting Transmitter\n");
     this->varatt1->reset();
-    sleep_ms(1);
     this->varatt2->reset();
-    sleep_ms(1);
     this->varatt3->reset();
-    sleep_ms(1);
     this->synth->reset();
-    sleep_ms(1);
     this->PA->reset();
-    sleep_ms(1);
     this->modSwitch->reset();
+    this->prbs->reset();
 }
 
 void TransmitterClass::run() {
@@ -85,20 +81,16 @@ void TransmitterClass::run() {
 }
 
 void TransmitterClass::handle_command(std::vector<std::string> tokens) {
-    printf("in handle command");
-    sleep_ms(100);
     size_t numTokens = tokens.size();
-    printf("Numtokens: %d", numTokens);
-    sleep_ms(100);
     if (numTokens == 0) {
-        printf("Empty command");
+        printf("CLI: Empty command");
         return;
     }
     //process command 
     if (strcmp(tokens[0].c_str(), "att") == 0) {
         //Allowed command is att (attnum) (attval)
         if (numTokens < 3) {
-            printf("Invalid command (att chain)");
+            printf("CLI: Invalid command (att chain)");
             return;
         }
 
@@ -112,11 +104,11 @@ void TransmitterClass::handle_command(std::vector<std::string> tokens) {
         } else if (strcmp(tokens[1].c_str(), "3")==0) {
             this->varatt1->set_atten(attval);
         } else {
-            printf("Invalid atten choice (1, 2, 3)");
+            printf("CLI: Invalid atten choice (1, 2, 3)");
         }
     } else if (strcmp("reset", tokens[0].c_str())==0) {
         if ((numTokens) < 2) {
-            printf("Reset: Not enough tokens");
+            printf("CLI: Not enough tokens for reset");
         }
 
         if (strcmp(tokens[1].c_str(), "att1")==0) {

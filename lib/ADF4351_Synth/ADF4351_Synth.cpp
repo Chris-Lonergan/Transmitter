@@ -1,3 +1,9 @@
+/**
+ * @file ADF4351_Synth.cpp
+ * @author @Chris-Lonergan
+ * @brief Implementation of ADF4351 Synthesizer/PLL IC
+ */
+
 #ifndef ADF4351_SYNTH_CPP
 #define ADF4351_SYNTH_CPP
 

@@ -1,3 +1,9 @@
+/**
+ * @file PRBS.cpp
+ * @author Chris Lonergan (lonerganchrisj@gmail.com)
+ * @brief Implementation of LFSR PRBS Class
+ */
+
 #ifndef PRBS_CPP
 #define PRBS_CPP
 

@@ -1,3 +1,9 @@
+/**
+ * @file Latched_Serial_Write.cpp
+ * @brief Implementation of Latched Serial Write Protocol
+ * @author Chris Lonergan (lonerganchrisj@gmail.com)
+ */
+
 #ifndef LATCHED_SERIAL_WRITE_CPP
 #define LATCHED_SERIAL_WRITE_CPP
 

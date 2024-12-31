@@ -1,3 +1,9 @@
+/**
+ * @file main.cpp
+ * @author @Chris-Lonergan
+ * @brief Contains main loop and helper functions
+ */
+
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "../lib/Transmitter_Class/Transmitter_Class.hpp"
@@ -6,6 +12,9 @@
 #include <cstring>
 #include <vector>
 
+/**
+ * @brief Helper function to initialize all board GPIO and directions
+ */
 void init() {
     stdio_init_all();
 
@@ -21,6 +30,13 @@ void init() {
     gpio_set_dir(HW_SW_GPIO, GPIO_IN);
 }
 
+/**
+ * @brief Helper function to parse serial input.
+ * @details This parses serial input from USB and tokenizes it into command words, using space as a delimiter. 
+ * For example, if the input string is 'command one two\n', returns a vector of the strings 'command', 'one', and 'two'.
+ * 
+ * @return Vector containing token strings from input command, where the strings are formed by splitting the command by spaces
+ */
 std::vector<std::string> get_command() {
     char strg[100];
     char chr;
@@ -57,7 +73,16 @@ std::vector<std::string> get_command() {
     return EMPTY_CMD;
 }
 
-
+/**
+ * @brief Main Control Loop
+ * 
+ * @details The main flow is 
+ * #1 Initialize GPIO 
+ * #2 Reset all devices on board to default state
+ * #3 Process and act on serial commands
+ * #4 Transmit PRBS if enabled
+ * #5 Repeat from 3
+ */
 int main()
 {
     init();
@@ -70,7 +95,7 @@ int main()
    
     while (true) {
         int hw_sw = gpio_get(HW_SW_GPIO);
-        std::vector<std::string> cmd = get_command();
+        std::vector<std::string> cmd = get_command(); //Returns vector of command strings separated by spaces
 
         if (hw_sw == 1) {
             printf("Currently in SW control, no commands possible");
@@ -78,7 +103,7 @@ int main()
         } else if (cmd != EMPTY_CMD) {
             transmitter.handle_command(cmd);
         }
-        transmitter.run();
+        transmitter.run(); //Can be expanded to do more than just transmit PRBS if enabled
     }
 }
 

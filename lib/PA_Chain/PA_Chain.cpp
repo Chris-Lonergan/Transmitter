@@ -1,3 +1,9 @@
+/**
+ * @file PA_Chain.cpp
+ * @author Chris Lonergan (lonerganchrisj@gmail.com)
+ * @brief Implementation of PA Chain (2x RF Switches and 1x Power Amplifier)
+ */
+
 #ifndef PA_CHAIN_CPP
 #define PA_CHAIN_CPP
 

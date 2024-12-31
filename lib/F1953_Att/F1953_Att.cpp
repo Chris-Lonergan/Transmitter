@@ -1,3 +1,9 @@
+/**
+ * @file F1953_Att.cpp
+ * @author Chris Lonergan (lonerganchrisj@gmail.com)
+ * @brief Implementation of F1953 Attenuator IC Class
+ */
+
 #ifndef F1935_ATT_CPP
 #define F1953_ATT_CPP
 

@@ -1,3 +1,9 @@
+/**
+ * @file Transmitter_Class.cpp
+ * @author Chris Lonergan (lonerganchrisj@gmail.com)
+ * @brief Implementation of Transmitter Board Class
+ */
+
 #ifndef TRANSMITTER_CLASS_CPP
 #define TRANSMITTER_CLASS_CPP
 

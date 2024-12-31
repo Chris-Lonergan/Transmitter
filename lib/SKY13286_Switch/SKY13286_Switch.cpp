@@ -1,3 +1,8 @@
+/**
+ * @file SKY13286_Switch.cpp
+ * @author Chris Lonergan (lonerganchrisj@gmail.com)
+ * @brief Implementation of SKY13285 Class
+ */
 #ifndef SKY13286_SWITCH_CPP
 #define SKY13286_SWITCH_CPP
 
